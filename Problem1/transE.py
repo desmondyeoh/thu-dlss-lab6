@@ -54,12 +54,19 @@ class TransEModel(object):
 
         if config.L1_flag:  # use L1-norm
             # TO DO
+            pos_ef = tf.norm(pos_h_e + pos_r_e - pos_t_e, ord=1, axis=1)
+            neg_ef = tf.norm(neg_h_e + neg_r_e - neg_t_e, ord=1, axis=1)
 
         else:  # use L2-norm
             # TO DO
+            pos_ef = tf.norm(pos_h_e + pos_r_e - pos_t_e, ord=2, axis=1)
+            neg_ef = tf.norm(neg_h_e + neg_r_e - neg_t_e, ord=2, axis=1)
 
         with tf.name_scope("output"):
             # TO DO
+            u = tf.maximum(margin + pos_ef - neg_ef, 0)
+            u = tf.reduce_sum(u)
+            self.loss = u
 
 
 def main(_):
